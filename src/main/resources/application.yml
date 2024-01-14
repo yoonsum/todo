@@ -5,13 +5,13 @@ spring:
     password:
     driver-class-name: org.h2.Driver
 
-    jpa:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
       hibernate:
-        ddl-auto: crate
-      properties:
-        hibernate:
-          show_sql: true
-          format_sql: ture
+#          show_sql: true
+        format_sql: ture
 
 logging.level:
   org.hibernate.SQL: debug
