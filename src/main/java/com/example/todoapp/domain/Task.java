@@ -22,19 +22,25 @@ public class Task {
 
     private LocalDate taskDate;
 
+    private LocalDate completedDate;
+
     @Enumerated(EnumType.STRING)
     private TaskPriority taskPriority;
 
     @Enumerated(EnumType.STRING)
     private TaskStatus taskStatus;
 
-    private LocalDate completedDate;
+    private int mysort;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="label_id")
+    private Label label;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_task_id")
     private Task parentTask;
 
-    @OneToMany(mappedBy = "parentTask", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parentTask")
     private List<Task> subTasks = new ArrayList<>();
 
     //===연관관계 메소드===//
@@ -44,6 +50,15 @@ public class Task {
     }
 
     public void deleteRelation(){
+        // 자식들과 연관관계 삭제
+        List<Task> subs = this.getSubTasks();
+        if(!subs.isEmpty()){
+            for(Task s : subs){
+                s.setParentTask(null);
+            }
+        }
+
+        // 부모와 연관관계 삭제
         Task parent = this.getParentTask();
         if(parent != null){
             parent.getSubTasks().remove(this);

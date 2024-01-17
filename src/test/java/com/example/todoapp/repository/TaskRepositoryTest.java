@@ -47,7 +47,7 @@ class TaskRepositoryTest {
 
     @Test
     @Rollback(value = false)
-    void 할일삭제_cascade() throws Exception{
+    void 할일삭제_부모() throws Exception{
         //given
         Task task1 = new Task();
         task1.setTitle("todo1");
@@ -60,19 +60,26 @@ class TaskRepositoryTest {
         task2.setTaskStatus(TaskStatus.DOING);
         task1.setRelation(task2);
 
+        Task task3 = new Task();
+        task3.setTitle("todo3");
+        task3.setTaskPriority(TaskPriority.LOW);
+        task3.setTaskStatus(TaskStatus.DOING);
+        task1.setRelation(task3);
+
         Long taskId1 = taskRepository.addTask(task1);
         Long taskId2 = taskRepository.addTask(task2);
+        Long taskId3 = taskRepository.addTask(task3);
 
         //when
         taskRepository.deleteTask(taskId1);
 
         //then
-        assertThat(taskRepository.readTask().size()).isEqualTo(0);
+        assertThat(taskRepository.readTask().size()).isEqualTo(2);
     }
 
     @Test
     @Rollback(value = false)
-    void 할일삭제() throws Exception{
+    void 할일삭제_자식() throws Exception{
         //given
         Task task1 = new Task();
         task1.setTitle("todo1");
