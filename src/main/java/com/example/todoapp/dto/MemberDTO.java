@@ -2,7 +2,10 @@ package com.example.todoapp.dto;
 
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter @Setter
 public class MemberDTO {
     @Pattern(regexp = "^[a-z]+$|^[a-z][0-9]+$", message = "ID는 알파벳 소문자와 숫자만 가능합니다.")
     @Size(min=7, max=12, message = "ID는 7~12자리입니다.")
