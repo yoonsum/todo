@@ -5,17 +5,17 @@ import lombok.Getter;
 
 @Entity
 @Getter
-public class Tag {
+public class Label {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="tag_id")
+    @Column(name="label_id")
     private Long id;
 
-    @Column(name="tag_name")
+    @Column(name="label_name")
     private String name;
 
     @Enumerated(EnumType.STRING)
-    private TagColor color;
+    private LabelColor color;
 
     @Enumerated(EnumType.STRING)
     private SortBy sortBy;

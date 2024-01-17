@@ -1,6 +1,6 @@
 package com.example.todoapp.domain;
 
-public enum TagColor {
+public enum LabelColor {
     WHITE("#ffffff"),
     RED("#ff0000"),
     TANGERINE("#f98603"),
@@ -16,7 +16,7 @@ public enum TagColor {
 
     private final String colorValue;
 
-    TagColor(String color) {
+    LabelColor(String color) {
         this.colorValue = color;
     }
 
