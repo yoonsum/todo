@@ -34,17 +34,6 @@ public class MemberService {
     }
 
     /**
-     * 회원 중복 검사
-     * @param memberId
-     */
-    private void validationDuplication(String memberId){
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-        if(optionalMember.isPresent()){
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
-        }
-    }
-
-    /**
      * 로그인
      * @param id
      * @param password
@@ -86,6 +75,23 @@ public class MemberService {
         memberRepository.delete(id);
     }
 
+
+    /**
+     * 회원 중복 검사
+     * @param memberId
+     */
+    private void validationDuplication(String memberId){
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        if(optionalMember.isPresent()){
+            throw new IllegalStateException("이미 존재하는 회원입니다.");
+        }
+    }
+
+    /**
+     * 회원 존재하는지 검사
+     * @param memberId
+     * @return
+     */
     private Member validateExistence(String memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         if (optionalMember.isEmpty()) {
