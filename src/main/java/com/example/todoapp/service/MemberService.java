@@ -1,6 +1,7 @@
 package com.example.todoapp.service;
 
 import com.example.todoapp.domain.Member;
+import com.example.todoapp.dto.MemberDTO;
 import com.example.todoapp.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,18 +16,32 @@ public class MemberService {
 
     /**
      * 회원가입
-     * @param member
+     * @param memberDTO
      * @return
      */
     @Transactional
-    public String join(Member member){
-        Optional<Member> optionalMember = memberRepository.findById(member.getId());
-        if(optionalMember.isPresent()){
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
-        }
+    public String join(MemberDTO memberDTO){
+        validationDuplication(memberDTO.getMemberId());
+
+        Member member = Member.builder()
+                .id(memberDTO.getMemberId())
+                .name(memberDTO.getMemberName())
+                .password(memberDTO.getPassword())
+                .build();
 
         memberRepository.save(member);
         return member.getId();
+    }
+
+    /**
+     * 회원 중복 검사
+     * @param memberId
+     */
+    private void validationDuplication(String memberId){
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        if(optionalMember.isPresent()){
+            throw new IllegalStateException("이미 존재하는 회원입니다.");
+        }
     }
 
     /**
@@ -36,18 +51,30 @@ public class MemberService {
      * @return
      */
     public String login(String id, String password){
-        Optional<Member> optionalMember = memberRepository.findById(id);
+        Member member = validateExistence(id);
 
-        if (optionalMember.isPresent()) {
-            Member member = optionalMember.get();
-            if (member.getPassword().equals(password)) {
-                return id;
-            } else {
-                throw new IllegalStateException("로그인 실패. 아이디 또는 비밀번호가 일치하지 않습니다.");
-            }
+        if (member.getPassword().equals(password)) {
+            return id;
         } else {
-            throw new IllegalStateException("존재하지 않는 회원입니다.");
+            throw new IllegalArgumentException("로그인 실패. 아이디 또는 비밀번호가 일치하지 않습니다.");
         }
+    }
+
+    /**
+     * 회원 정보 수정
+     * @param member
+     */
+    @Transactional
+    public void updateMember(MemberDTO member){
+        Member origin = validateExistence(member.getMemberId());
+
+        Member update = Member.builder()
+                .id(member.getMemberId())
+                .name(member.getMemberName())
+                .password(member.getPassword())
+                .build();
+
+        memberRepository.update(origin, update);
     }
 
     /**
@@ -56,7 +83,15 @@ public class MemberService {
      */
     @Transactional
     public void deleteMember(String id){
-        memberRepository.deleteMember(id);
+        memberRepository.delete(id);
     }
 
+    private Member validateExistence(String memberId) {
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        if (optionalMember.isEmpty()) {
+            throw new IllegalArgumentException("존재하지 않는 회원입니다.");
+        }
+
+        return optionalMember.get();
+    }
 }
