@@ -20,9 +20,12 @@ public class MemberRepository {
         return Optional.ofNullable(em.find(Member.class, id));
     }
 
-    public void deleteMember(String id){
+    public void update(Member origin, Member update){
+        origin.updateMember(update.getName(), update.getPassword());
+    }
+
+    public void delete(String id){
         Member deleteMember = em.find(Member.class, id);
         em.remove(deleteMember);
     }
-
 }
