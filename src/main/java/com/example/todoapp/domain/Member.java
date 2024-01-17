@@ -30,4 +30,13 @@ public class Member {
         this.name = name;
         this.password = password;
     }
+
+    public void updateMember(String name, String password){
+        if(name != null){
+            this.name = name;
+        }
+        if(password != null){
+            this.password = password;
+        }
+    }
 }
