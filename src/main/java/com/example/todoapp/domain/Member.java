@@ -1,10 +1,11 @@
 package com.example.todoapp.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,6 +19,10 @@ public class Member {
 
     @Column(nullable = false)
     private String password;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "label_id")
+    private List<Label> labels = new ArrayList<>();
 
     @Builder
     public Member(String id, String name, String password) {

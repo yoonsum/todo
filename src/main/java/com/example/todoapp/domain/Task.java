@@ -1,6 +1,7 @@
 package com.example.todoapp.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,6 +43,16 @@ public class Task {
 
     @OneToMany(mappedBy = "parentTask")
     private List<Task> subTasks = new ArrayList<>();
+
+    @Builder
+    public Task(String title, String content, LocalDate taskDate, TaskPriority priority, Label label){
+        this.title = title;
+        this.content = content;
+        this.taskDate = taskDate;
+        this.taskPriority = priority;
+        this.label = label;
+        this.taskStatus = TaskStatus.DOING;
+    }
 
     //===연관관계 메소드===//
     public void setRelation(Task subTask){

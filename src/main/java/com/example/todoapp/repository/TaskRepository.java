@@ -17,13 +17,19 @@ public class TaskRepository {
         return task.getId();
     }
 
+    public void updateTask(){
+
+    }
+
     public List<Task> readTask(){
         return em.createQuery("select t from Task t", Task.class).getResultList();
     }
 
     public void deleteTask(Long taskId){
         Task task = em.find(Task.class, taskId);
-        task.deleteRelation();
-        em.remove(task);
+        if(task!= null){
+            task.deleteRelation();
+            em.remove(task);
+        }
     }
 }
