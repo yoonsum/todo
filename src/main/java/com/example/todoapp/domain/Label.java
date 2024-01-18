@@ -33,11 +33,23 @@ public class Label {
     private List<Task> tasks = new ArrayList<>();
 
     @Builder
-    public Label(Long id, String name, LabelColor color, Member member) {
-        this.id = id;
+    public Label(String name, LabelColor color, Member member) {
         this.name = name;
         this.color = color;
         this.sortBy = SortBy.MYSORT;
         this.member = member;
+    }
+
+    public void updateLabel(String name, LabelColor color){
+        if(name != null){
+            this.name = name;
+        }
+        if(color != null){
+            this.color = color;
+        }
+    }
+
+    public void updateSortBy(SortBy sort){
+        this.sortBy = sort;
     }
 }
