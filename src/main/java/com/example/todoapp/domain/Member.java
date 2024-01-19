@@ -21,7 +21,6 @@ public class Member {
     private String password;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "label_id")
     private List<Label> labels = new ArrayList<>();
 
     @Builder
