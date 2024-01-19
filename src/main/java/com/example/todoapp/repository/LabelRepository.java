@@ -33,7 +33,7 @@ public class LabelRepository {
     }
 
     public List<Label> findByMember(String member_id){
-        return em.createQuery("select l from Label m where l.member_id = :member_id", Label.class)
+        return em.createQuery("select l from Label l where l.member.id = :member_id", Label.class)
                 .setParameter("member_id", member_id)
                 .getResultList();
     }
