@@ -78,6 +78,7 @@ public class LabelService {
         return labelRepository.findByMember(member_id);
     }
 
+    @Transactional
     public void deleteLabel(Long label_id){
         labelRepository.deleteLabel(label_id);
     }
