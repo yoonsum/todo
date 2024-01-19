@@ -2,6 +2,7 @@ package com.example.todoapp.repository;
 
 import com.example.todoapp.domain.Label;
 import com.example.todoapp.domain.LabelColor;
+import com.example.todoapp.domain.SortBy;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -14,16 +15,19 @@ import java.util.Optional;
 public class LabelRepository {
     private final EntityManager em;
 
-    public void saveLabel(Label label){
+    public Long saveLabel(Label label){
         em.persist(label);
+        return label.getId();
     }
 
     public void updateLabel(Label origin, String name, LabelColor color){
         origin.updateLabel(name, color);
     }
 
-    public void updateSortBy(){
+    public void updateSortBy(Label label, SortBy sortBy){
         //1.sortBy 값변경
+        label.updateSortBy(sortBy);
+
         //2.List<task>의 정렬변경
         //task entity 에 만들것이냐...어디에 만들어야하지...
     }

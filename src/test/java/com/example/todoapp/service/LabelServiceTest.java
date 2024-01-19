@@ -1,6 +1,8 @@
 package com.example.todoapp.service;
 
+import com.example.todoapp.domain.Label;
 import com.example.todoapp.domain.LabelColor;
+import com.example.todoapp.domain.SortBy;
 import com.example.todoapp.dto.LabelDTO;
 import com.example.todoapp.dto.MemberDTO;
 import com.example.todoapp.repository.LabelRepository;
@@ -12,7 +14,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @SpringBootTest
+@Transactional
+//@Rollback(false)
 class LabelServiceTest {
     @Autowired LabelRepository labelRepository;
     @Autowired LabelService labelService;
@@ -30,8 +37,6 @@ class LabelServiceTest {
     }
 
     @Test
-    @Transactional
-    @Rollback(false)
     public void 라벨_추가하기() throws Exception{
         //given
         LabelDTO labelDTO = new LabelDTO();
@@ -39,7 +44,64 @@ class LabelServiceTest {
         labelDTO.setColor(LabelColor.LAVENDER);
 
         //when
-        labelService.createLabel(labelDTO, member_id);
+        Long id = labelService.createLabel(labelDTO, member_id);
 
+        //then
+        Label label = labelService.readLabel(id);
+        assertThat(label.getId()).isEqualTo(id);
+    }
+
+    @Test
+    public void 라벨_수정하기() throws Exception{
+        //given
+        LabelDTO labelDTO = new LabelDTO();
+        labelDTO.setName("label1");
+        labelDTO.setColor(LabelColor.LAVENDER);
+
+        Long id = labelService.createLabel(labelDTO, member_id);
+
+        //when
+        labelDTO.setColor(LabelColor.LIGHTSKYBLUE);
+
+        labelService.updateLabel(id, labelDTO);
+
+        //then
+        Label label = labelService.readLabel(id);
+        assertThat(label.getColor()).isEqualTo(labelDTO.getColor());
+    }
+
+    @Test
+    public void 라벨_정렬기준_변경() throws Exception{
+        //given
+        LabelDTO labelDTO = new LabelDTO();
+        labelDTO.setName("label1");
+        labelDTO.setColor(LabelColor.LAVENDER);
+
+        Long id = labelService.createLabel(labelDTO, member_id);
+
+        //when
+        labelService.updateSortBy(id, SortBy.PRIORITY);
+
+        //then
+        Label label = labelService.readLabel(id);
+        assertThat(label.getSortBy()).isEqualTo(SortBy.PRIORITY);
+    }
+
+    @Test
+    public void 라벨_삭제() throws Exception{
+        //given
+        LabelDTO labelDTO = new LabelDTO();
+        labelDTO.setName("label1");
+        labelDTO.setColor(LabelColor.LAVENDER);
+
+        Long id = labelService.createLabel(labelDTO, member_id);
+
+        //when
+        labelService.deleteLabel(id);
+
+        //then
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
+                ()->labelService.readLabel(id));
+        assertThat(e.getMessage()).isEqualTo("존재하지 않는 Label입니다.");
     }
 }

@@ -25,7 +25,7 @@ public class LabelService {
      * @param member_id
      */
     @Transactional
-    public void createLabel(LabelDTO labelDTO, String member_id){
+    public Long createLabel(LabelDTO labelDTO, String member_id){
         Optional<Member> optionalMember = memberRepository.findById(member_id);
         if(optionalMember.isPresent()){
             Member member = optionalMember.get();
@@ -36,8 +36,10 @@ public class LabelService {
                     .member(member)
                     .build();
 
-            labelRepository.saveLabel(label);
+            return labelRepository.saveLabel(label);
         }
+
+        return null;
     }
 
     /**
@@ -53,11 +55,15 @@ public class LabelService {
 
     /**
      * 라벨 정렬기준 수정하기
-     * @param sortby
+     * @param label_id
+     * @param sortBy
      */
     @Transactional
-    public void updateSortBy(SortBy sortby){
+    public void updateSortBy(Long label_id, SortBy sortBy){
         //1. 정렬기준 변경
+        Label label = validateExistence(label_id);
+        labelRepository.updateSortBy(label, sortBy);
+
         //2. 바뀐 정렬기준으로 task 정렬 후 다시 불러오기?? -> 동적 가능??????
     }
 
@@ -80,6 +86,7 @@ public class LabelService {
 
     @Transactional
     public void deleteLabel(Long label_id){
+        validateExistence(label_id);
         labelRepository.deleteLabel(label_id);
     }
 
