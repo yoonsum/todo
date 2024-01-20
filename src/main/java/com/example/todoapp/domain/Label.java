@@ -37,7 +37,6 @@ public class Label {
         this.name = name;
         this.color = color;
         this.member = member;
-        this.sortBy = SortBy.MYSORT;
     }
 
     public void updateLabel(String name, LabelColor color){
