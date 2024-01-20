@@ -44,6 +44,8 @@ public class LabelRepository {
 
     public void deleteLabel(Long label_id){
         Label label = em.find(Label.class, label_id);
-        em.remove(label);
+        if(label != null){
+            em.remove(label);
+        }
     }
 }
