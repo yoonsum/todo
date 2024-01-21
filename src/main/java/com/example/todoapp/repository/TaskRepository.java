@@ -21,8 +21,8 @@ public class TaskRepository {
         return task.getId();
     }
 
-    public void updateTask(Task origin, TaskDTO update){
-        origin.updateTask(update.getTitle(), update.getContent(), update.getTaskDate(), update.getTaskPriority(), update.getLabel());
+    public void updateTask(Task origin, TaskDTO update, Label label){
+        origin.updateTask(update.getTitle(), update.getContent(), update.getTaskDate(), update.getTaskPriority(), label);
     }
 
     public void completeTask(Task task, LocalDate date){

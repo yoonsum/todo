@@ -3,6 +3,7 @@ package com.example.todoapp.service;
 import com.example.todoapp.domain.Label;
 import com.example.todoapp.domain.Task;
 import com.example.todoapp.dto.TaskDTO;
+import com.example.todoapp.repository.LabelRepository;
 import com.example.todoapp.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,22 +18,26 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TaskService {
     private final TaskRepository taskRepository;
+    private final LabelRepository labelRepository;
 
     /**
      * 할 일 생성하기
      * @param taskDTO
      */
     @Transactional
-    public void addTask(TaskDTO taskDTO){
+    public Long addTask(TaskDTO taskDTO){
+
+        Label label = existenceLabel(taskDTO.getLabel_id());
+
         Task task = Task.builder()
                 .title(taskDTO.getTitle())
                 .content(taskDTO.getContent())
                 .taskDate(taskDTO.getTaskDate())
                 .priority(taskDTO.getTaskPriority())
-                .label(taskDTO.getLabel())
+                .label(label)
                 .build();
 
-        taskRepository.addTask(task);
+        return taskRepository.addTask(task);
     }
 
     /**
@@ -53,7 +58,9 @@ public class TaskService {
     public void updateTask(Long task_id, TaskDTO taskDTO){
         Task task = validateExistenceTask(task_id);
 
-        taskRepository.updateTask(task, taskDTO);
+        Label label = existenceLabel(taskDTO.getLabel_id());
+
+        taskRepository.updateTask(task, taskDTO, label);
     }
 
     /**
@@ -76,6 +83,14 @@ public class TaskService {
         taskRepository.deleteTask(taskId);
     }
 
+    private Label existenceLabel(Long label_id){
+        Optional<Label> optionalLabel = labelRepository.findByOne(label_id);
+
+        if(optionalLabel.isEmpty()){
+            throw new IllegalArgumentException("존재하지 않는 label입니다.");
+        }
+        return optionalLabel.get();
+    }
     /**
      * 할일 존재 유뮤 검증
      * @param task_id

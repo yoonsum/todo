@@ -19,12 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional
-//@Rollback(false)
 class LabelServiceTest {
-    @Autowired LabelRepository labelRepository;
     @Autowired LabelService labelService;
     @Autowired MemberService memberService;
-    @Autowired MemberRepository memberRepository;
     private String member_id;
 
     @BeforeEach

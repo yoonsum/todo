@@ -19,5 +19,5 @@ public class TaskDTO {
 
     private TaskPriority taskPriority;
 
-    private Label label;
+    private Long label_id;
 }
