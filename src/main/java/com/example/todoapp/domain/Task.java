@@ -23,15 +23,13 @@ public class Task {
 
     private LocalDate taskDate;
 
-    private LocalDate completedDate;
-
     @Enumerated(EnumType.STRING)
     private TaskPriority taskPriority;
 
     @Enumerated(EnumType.STRING)
     private TaskStatus taskStatus;
-
-    private int mysort;
+    
+    private LocalDate completedDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="label_id")
@@ -52,6 +50,21 @@ public class Task {
         this.taskPriority = priority;
         this.label = label;
         this.taskStatus = TaskStatus.DOING;
+    }
+
+    // 할 일 수정
+    public void updateTask(String title, String content, LocalDate taskDate, TaskPriority priority, Label label){
+        this.title = title;
+        this.content = content;
+        this.taskDate = taskDate;
+        this.taskPriority = priority;
+        this.label = label;
+    }
+
+    // 할 일 완료
+    public void completedTask(LocalDate completedDate){
+        this.taskStatus = TaskStatus.DONE;
+        this.completedDate = completedDate;
     }
 
     //===연관관계 메소드===//
