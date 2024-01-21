@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<style>
+    .fieldError {
+            border-color: #bd2130;
+    }
+</style>
+<body>
+<div class="container-md">
+
+    <form action="/members/create" th:object="${memberDTO}" method="post" class="row g-3">
+        <div class="col-12">
+            <label th:for="memberId" class="form-label" >ID</label>
+            <input type="text" th:field="*{memberId}" placeholder="ID" class="form-control"
+                   th:class="${#fields.hasErrors('memberId')}? 'form-control fieldError' : 'form-control'"/>
+            <p th:if="${#fields.hasErrors('memberId')}" th:errors="*{memberId}">Incorrect date</p>
+        </div>
+        <div class="col-12">
+            <label th:for="password" class="form-label" >Password</label>
+            <input type="text" th:field="*{password}" placeholder="Password" class="form-control"
+                   th:class="${#fields.hasErrors('password')}? 'form-control fieldError' : 'form-control'"/>
+            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Incorrect date</p>
+        </div>
+        <div class="col-12">
+            <label th:for="memberName" class="form-label" >이름</label>
+            <input type="text" th:field="*{memberName}"  placeholder="Name" class="form-control"
+                   th:class="${#fields.hasErrors('memberName')}? 'form-control fieldError' : 'form-control'"/>
+            <p th:if="${#fields.hasErrors('memberName')}" th:errors="*{memberName}">Incorrect date</p>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary mb-3">회원가입</button>
+        </div>
+    </form>
+
+</div>
+</body>
+</html>
