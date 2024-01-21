@@ -83,6 +83,11 @@ public class TaskService {
         taskRepository.deleteTask(taskId);
     }
 
+    /**
+     * 라벨 존재 유무 검증
+     * @param label_id
+     * @return
+     */
     private Label existenceLabel(Long label_id){
         Optional<Label> optionalLabel = labelRepository.findByOne(label_id);
 
@@ -91,6 +96,7 @@ public class TaskService {
         }
         return optionalLabel.get();
     }
+
     /**
      * 할일 존재 유뮤 검증
      * @param task_id
